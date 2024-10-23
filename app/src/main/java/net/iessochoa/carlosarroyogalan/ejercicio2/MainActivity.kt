@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.res.stringArrayResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import net.iessochoa.carlosarroyogalan.ejercicio2.ui.theme.Ejercicio2Theme
 
@@ -67,8 +68,11 @@ fun GreetingPreview() {
 
 @Composable
 fun CalculadoraApp() {
+    var num1 by rememberSaveable { mutableStateOf("") }
+    var num2 by rememberSaveable { mutableStateOf("") }
     var selectedOperation by rememberSaveable { mutableStateOf("SUMA") }
-    val radioOptions = listOf("SUMA", "RESTA", "MULT", "DIV") // Opciones para las operaciones
+    val radioOptions = stringArrayResource(R.array.operaciones).toList() // Opciones para las operaciones
+    val resultado = CalcularResultado(num1, num2, selectedOperation)
     // Diseño básico con campos de texto y espaciadores
     Column(
         modifier = Modifier
@@ -77,23 +81,25 @@ fun CalculadoraApp() {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Text(text = "Calculadora", style = MaterialTheme.typography.displaySmall)
+        Text(text = stringResource(R.string.calculadora), style = MaterialTheme.typography.displaySmall)
 
         Spacer(modifier = Modifier.height(16.dp))
 
         OutlinedTextField(
-            value = "",
-            onValueChange = {},
-            label = { Text("Número 1") },
+            value = num1,
+            onValueChange = {num1 = it},
+            label = { Text(stringResource(R.string.n_mero_1)) },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             modifier = Modifier.fillMaxWidth()
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
         OutlinedTextField(
-            value = "",
-            onValueChange = {},
-            label = { Text("Número 2") },
+            value = num2,
+            onValueChange = {num2 = it},
+            label = { Text(stringResource(R.string.n_mero_2)) },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -108,11 +114,18 @@ fun CalculadoraApp() {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Text(text = "Resultado: 0.0", fontSize = 32.sp)
+        Text(text = "Resultado: $resultado", fontSize = 32.sp)
 
         Spacer(modifier = Modifier.height(16.dp))
+        //Iconos
+        val icon = when (selectedOperation) {
+            "SUMA" -> Icons.Default.Add
+            "RESTA" -> Icons.Default.Menu
+            "MULT" -> Icons.Default.Clear
+            else -> Icons.Default.Edit
+        }
 
-        Icon(imageVector = Icons.Default.Add, contentDescription = "Operación seleccionada", modifier = Modifier.size(100.dp))
+        Icon(imageVector = icon, contentDescription = "Operación seleccionada", modifier = Modifier.size(100.dp))
     }
 }
 //Configuracion del radiobutton
@@ -138,5 +151,21 @@ fun RadioButton(
                 Text(text = opcion)
             }
         }
+    }
+}
+
+// Función para calcular el resultado
+@Composable
+fun CalcularResultado(num1: String, num2: String, operation: String): String {
+    //Variables declaradas
+    val number1 = num1.toDoubleOrNull() ?: 0.0
+    val number2 = num2.toDoubleOrNull() ?: 0.0
+    return when (operation) {
+        //Configuracion de las diferentes operaciones
+        "SUMA" -> (number1 + number2).toString()
+        "RESTA" -> (number1 - number2).toString()
+        "MULT" -> (number1 * number2).toString()
+        "DIV" -> if (number2 != 0.0) (number1 / number2).toString() else "0"
+        else -> "0"
     }
 }
