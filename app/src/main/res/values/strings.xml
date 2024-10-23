@@ -1,8 +1,12 @@
 <resources>
-    <string name="app_name">Ejercicio2</string>
-    <string name="calculate_tip">Calcular propina</string>
-    <string name="bill_amount">Cuenta:</string>
-    <string name="tip_amount">Porcentaje de propina: %s</string>
-    <string name="how_was_the_service">Porcentaje de propina:</string>
-    <string name="round_up_tip">¿Redondear Propina?</string>
+    <string name="app_name">Calculadora</string>
+    <string name="number_1_label">Número 1</string>
+    <string name="number_2_label">Número 2</string>
+    <string name="result_label">Resultado:</string>
+    <string-array name="operaciones">
+        <item>SUMA</item>
+        <item>RESTA</item>
+        <item>MULT</item>
+        <item>DIV</item>
+    </string-array>
 </resources>
