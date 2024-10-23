@@ -68,10 +68,14 @@ fun GreetingPreview() {
 
 @Composable
 fun CalculadoraApp() {
+    //Declaracion de variables de los numeros
     var num1 by rememberSaveable { mutableStateOf("") }
     var num2 by rememberSaveable { mutableStateOf("") }
+    //Variable de seleccion por defecto
     var selectedOperation by rememberSaveable { mutableStateOf("SUMA") }
-    val radioOptions = stringArrayResource(R.array.operaciones).toList() // Opciones para las operaciones
+    //Radiobutton para seleccionar las diferentes operaciones
+    val radioOptions = stringArrayResource(R.array.operaciones).toList()
+    //Llamada al metodo creado para hacer los calculos pasandole las variables anteriores a usar
     val resultado = CalcularResultado(num1, num2, selectedOperation)
     // Diseño básico con campos de texto y espaciadores
     Column(
@@ -82,9 +86,9 @@ fun CalculadoraApp() {
         verticalArrangement = Arrangement.Center
     ) {
         Text(text = stringResource(R.string.calculadora), style = MaterialTheme.typography.displaySmall)
-
+        //Espacios entre cada objeto para que no estén pegados unos de otros
         Spacer(modifier = Modifier.height(16.dp))
-
+        //Cuadro de texto en el que se ingresará el valor a sumar
         OutlinedTextField(
             value = num1,
             onValueChange = {num1 = it},
@@ -92,7 +96,7 @@ fun CalculadoraApp() {
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             modifier = Modifier.fillMaxWidth()
         )
-
+        //Espacios entre cada objeto para que no estén pegados unos de otros
         Spacer(modifier = Modifier.height(16.dp))
 
         OutlinedTextField(
@@ -102,7 +106,7 @@ fun CalculadoraApp() {
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             modifier = Modifier.fillMaxWidth()
         )
-
+        //Espacios entre cada objeto para que no estén pegados unos de otros
         Spacer(modifier = Modifier.height(16.dp))
 
         // Opciones del radiobutton
@@ -111,37 +115,38 @@ fun CalculadoraApp() {
             operacionSeleccionada = selectedOperation,
             onOptionSelected = { selectedOperation = it }
         )
-
+        //Espacios entre cada objeto para que no estén pegados unos de otros
         Spacer(modifier = Modifier.height(16.dp))
-
+        //Muestra el resultado
         Text(text = "Resultado: $resultado", fontSize = 32.sp)
-
+        //Espacios entre cada objeto para que no estén pegados unos de otros
         Spacer(modifier = Modifier.height(16.dp))
-        //Iconos
+        //Los diferentes iconos que se van a mostrar en caso de que selecciones una especifica
         val icon = when (selectedOperation) {
             "SUMA" -> Icons.Default.Add
             "RESTA" -> Icons.Default.Menu
             "MULT" -> Icons.Default.Clear
             else -> Icons.Default.Edit
         }
-
-        Icon(imageVector = icon, contentDescription = "Operación seleccionada", modifier = Modifier.size(100.dp))
+        //El icono que será mostrado y que recibirá las imagenes al haber recibido el objecto
+        Icon(imageVector = icon, contentDescription = stringResource(R.string.operaci_n_seleccionada), modifier = Modifier.size(100.dp))
     }
 }
 //Configuracion del radiobutton
 @Composable
 fun RadioButton(
-    //Opciones de Radiobutton
+    //Atributos y operaciones de estos
     listaOpciones: List<String>,
     operacionSeleccionada: String,
     onOptionSelected: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    //Lugar en el que esté se contendrá
     Row(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.Center
     ) {
-        //Por cada opcion de radioButton
+        //Configuracion que nos permitirá que por cada elemento de la lista de opciones, al ser clicadoo el radio button poder mostrar las imagenes
         listaOpciones.forEach { opcion ->
             Row(verticalAlignment = Alignment.CenterVertically) {
                 RadioButton(
