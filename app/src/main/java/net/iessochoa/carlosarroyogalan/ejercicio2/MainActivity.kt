@@ -1,6 +1,7 @@
 package net.iessochoa.carlosarroyogalan.ejercicio2
 
 import android.os.Bundle
+import android.widget.RadioButton
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -66,6 +67,8 @@ fun GreetingPreview() {
 
 @Composable
 fun CalculadoraApp() {
+    var selectedOperation by rememberSaveable { mutableStateOf("SUMA") }
+    val radioOptions = listOf("SUMA", "RESTA", "MULT", "DIV") // Opciones para las operaciones
     // Diseño básico con campos de texto y espaciadores
     Column(
         modifier = Modifier
@@ -78,7 +81,6 @@ fun CalculadoraApp() {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Placeholder para los campos de texto de número
         OutlinedTextField(
             value = "",
             onValueChange = {},
@@ -97,17 +99,44 @@ fun CalculadoraApp() {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Placeholder para los RadioButtons
-        Text(text = "Operaciones", style = MaterialTheme.typography.bodyLarge)
+        // Opciones del radiobutton
+        RadioButton(
+            listaOpciones = radioOptions,
+            operacionSeleccionada = selectedOperation,
+            onOptionSelected = { selectedOperation = it }
+        )
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Placeholder para el resultado
         Text(text = "Resultado: 0.0", fontSize = 32.sp)
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Placeholder para el icono
         Icon(imageVector = Icons.Default.Add, contentDescription = "Operación seleccionada", modifier = Modifier.size(100.dp))
+    }
+}
+//Configuracion del radiobutton
+@Composable
+fun RadioButton(
+    //Opciones de Radiobutton
+    listaOpciones: List<String>,
+    operacionSeleccionada: String,
+    onOptionSelected: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center
+    ) {
+        //Por cada opcion de radioButton
+        listaOpciones.forEach { opcion ->
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                RadioButton(
+                    selected = operacionSeleccionada == opcion,
+                    onClick = { onOptionSelected(opcion) }
+                )
+                Text(text = opcion)
+            }
+        }
     }
 }
